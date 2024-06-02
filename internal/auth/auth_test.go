@@ -11,7 +11,7 @@ func TestGetAPIKey(t *testing.T) {
 	testHeaderInvalid := http.Header{"Authorization": []string{"ApiKe"}}
 	testHeaderEmpty := http.Header{"Authorization": []string{""}}
 	key, err := GetAPIKey(testHeaderValid)
-	if !reflect.DeepEqual("", key) {
+	if !reflect.DeepEqual("123456", key) {
 		t.Fatalf("expected: 123456, got: %v, err: %v", key, err)
 	}
 	key, err = GetAPIKey(testHeaderInvalid)
