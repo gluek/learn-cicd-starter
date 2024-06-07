@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -38,6 +39,7 @@ func main() {
 	apiCfg := apiConfig{}
 
 	// https://github.com/libsql/libsql-client-go/#open-a-connection-to-sqld
+	// need a change
 	// libsql://[your-database].turso.io?authToken=[your-auth-token]
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
@@ -88,9 +90,11 @@ func main() {
 	v1Router.Get("/healthz", handlerReadiness)
 
 	router.Mount("/v1", v1Router)
+	timeout, _ := time.ParseDuration("2s")
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
+		Addr:              ":" + port,
+		Handler:           router,
+		ReadHeaderTimeout: timeout,
 	}
 
 	log.Printf("Serving on port: %s\n", port)
